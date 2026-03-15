@@ -14,8 +14,10 @@ class ExecResult:
 
 
 class DockerBackend:
-    def __init__(self) -> None:
-        self.client = docker.from_env()
+    def __init__(self, client: docker.DockerClient | None = None) -> None:
+        # Accept an injected client (useful for testing or non-default sockets).
+        # Falls back to docker.from_env() which reads DOCKER_HOST if set.
+        self.client = client if client is not None else docker.from_env()
 
     # Maps our NetworkMode values to Docker's network_mode parameter.
     # "allowlist" uses bridge networking — the policy engine has already
