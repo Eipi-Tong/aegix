@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, Optional
 import time
 import uuid
 
@@ -73,7 +73,7 @@ class ToolRouter:
             image = getattr(call, "image", None) or self.default_image
 
             self.auditor.log("SANDBOX_CREATE_START", {"run_id": run_id, "image": image})
-            container_id = self.backend.create(image=image)
+            container_id = self.backend.create(image=image, limits=decision.adjusted.limits)
             self.auditor.log("SANDBOX_CREATE_END", {"run_id": run_id, "container_id": container_id})
 
             self.auditor.log("EXEC_START", {
@@ -82,7 +82,11 @@ class ToolRouter:
                 "cmd": getattr(call, "cmd", ""),
             })
 
-            res = self.backend.exec(container_id=container_id, cmd=getattr(call, "cmd", ""))
+            res = self.backend.exec(
+                container_id=container_id,
+                cmd=getattr(call, "cmd", ""),
+                timeout_s=decision.adjusted.limits.timeout_s,
+            )
 
             self.auditor.log("EXEC_END", {
                 "run_id": run_id,
