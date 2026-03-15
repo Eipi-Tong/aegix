@@ -36,6 +36,7 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 - [x] Enforce network mode — `none`/`bridge`/`host` mapped to Docker; `allowlist` uses bridge
 - [x] Enforce FS rules — container root is read-only; `write_paths` get tmpfs mounts; `read_only_paths` are bind-mounted `:ro` from host
 - [x] Unit tests for `PolicyEngine` — 18 tests covering deny patterns, allow-list mode, network allowlist guard, per-tool limits; fixed `r.research` → `r.search` bug
+- [x] Unit tests for `ToolRouter` — 20 tests covering validation, policy deny, exec success/failure, container cleanup
 - [x] `ToolCall` / `ToolContext` data models (`aegix_core/models.py`)
 - [x] `AegixError` typed error model with error type literals (`aegix_core/errors.py`)
 - [x] `PolicyConfig` + `load_policy()` from YAML (`aegix_core/policy.py`)
@@ -57,14 +58,11 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 
 ### In Progress
 
-- [ ] **[P1]** Unit tests for `ToolRouter` — validation errors, policy deny, exec success/failure paths
+- [ ] **[P1]** Integration tests for `DockerBackend` — real container create/exec/destroy
 
 ---
 
 ### Backlog
-
-#### Testing (P1)
-- [ ] **[P1]** Integration tests for `DockerBackend` — real container create/exec/destroy
 
 #### Observability (P2)
 - [ ] **[P2]** `dump_effective_policy()` — expose as CLI subcommand (`aegix policy dump`)
@@ -112,3 +110,4 @@ _All resolved._
 | 2026-03-15 | 2246ad7 | Enforce network mode (none/bridge/host/allowlist) in DockerBackend |
 | 2026-03-15 | b6eb660 | Enforce FS rules: read-only root, tmpfs write_paths, ro bind-mounts |
 | 2026-03-15 | 4e49078 | PolicyEngine unit tests (18); fix r.research→r.search bug |
+| 2026-03-15 | 7393f1e | ToolRouter unit tests (20) |
