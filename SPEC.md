@@ -54,10 +54,15 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 
 ---
 
+### In Progress
+
+- [ ] **[P1]** Unit tests for `PolicyEngine` — deny patterns, allow-list mode, per-tool limits
+
+---
+
 ### Backlog
 
 #### Testing (P1)
-- [ ] **[P1]** Unit tests for `PolicyEngine` — deny patterns, allow-list mode, per-tool limits
 - [ ] **[P1]** Unit tests for `ToolRouter` — validation errors, policy deny, exec success/failure paths
 - [ ] **[P1]** Integration tests for `DockerBackend` — real container create/exec/destroy
 
