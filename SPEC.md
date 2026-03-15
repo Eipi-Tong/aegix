@@ -33,6 +33,7 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 - [x] Fix import paths — all `aegix_core` modules use correct `aegix_core.*` imports; CLI entry point wired to `aegix_core.cli:app`
 - [x] Remove `aegix_cli` stub package — `aegix_core/cli.py` is the sole CLI entry point
 - [x] Enforce resource limits — `nano_cpus`, `mem_limit`, `pids_limit` applied on container create; `timeout` command enforces wall-clock timeout on exec
+- [x] Enforce network mode — `none`/`bridge`/`host` mapped to Docker; `allowlist` uses bridge
 - [x] `ToolCall` / `ToolContext` data models (`aegix_core/models.py`)
 - [x] `AegixError` typed error model with error type literals (`aegix_core/errors.py`)
 - [x] `PolicyConfig` + `load_policy()` from YAML (`aegix_core/policy.py`)
@@ -54,14 +55,11 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 
 ### In Progress
 
-- [ ] **[P1]** Enforce network mode in `DockerBackend` — pass `network_mode` / `network_allowlist` to container create
+- [ ] **[P1]** Enforce FS rules in `DockerBackend` — mount paths as read-only or writable per `FSRule`
 
 ---
 
 ### Backlog
-
-#### Core Enforcement (P1)
-- [ ] **[P1]** Enforce FS rules in `DockerBackend` — mount paths as read-only or writable per `FSRule`
 
 #### Testing (P1)
 - [ ] **[P1]** Unit tests for `PolicyEngine` — deny patterns, allow-list mode, per-tool limits
@@ -111,3 +109,4 @@ _All resolved._
 | 2026-03-15 | 9ca0c90 | Fix import paths: aegix.* → aegix_core.*, CLI entry point updated |
 | 2026-03-15 | e06fbef | Remove empty aegix_cli stub; aegix_core/cli.py is now canonical CLI |
 | 2026-03-15 | c8f8430 | Enforce resource limits (cpu, mem, pids, timeout) in DockerBackend |
+| 2026-03-15 | 2246ad7 | Enforce network mode (none/bridge/host/allowlist) in DockerBackend |
