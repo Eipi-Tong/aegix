@@ -37,6 +37,7 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 - [x] Enforce FS rules — container root is read-only; `write_paths` get tmpfs mounts; `read_only_paths` are bind-mounted `:ro` from host
 - [x] Unit tests for `PolicyEngine` — 18 tests covering deny patterns, allow-list mode, network allowlist guard, per-tool limits; fixed `r.research` → `r.search` bug
 - [x] Unit tests for `ToolRouter` — 20 tests covering validation, policy deny, exec success/failure, container cleanup
+- [x] Integration tests for `DockerBackend` — 17 tests covering create/destroy, exec, resource limits, network modes, FS rules
 - [x] `ToolCall` / `ToolContext` data models (`aegix_core/models.py`)
 - [x] `AegixError` typed error model with error type literals (`aegix_core/errors.py`)
 - [x] `PolicyConfig` + `load_policy()` from YAML (`aegix_core/policy.py`)
@@ -53,12 +54,6 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 
 #### Example Agent (`aegix_agent`)
 - [x] OpenAI runner example — LLM tool call → Aegix exec loop (`aegix_agent/openai_runner.py`)
-
----
-
-### In Progress
-
-- [ ] **[P1]** Integration tests for `DockerBackend` — real container create/exec/destroy
 
 ---
 
@@ -111,3 +106,4 @@ _All resolved._
 | 2026-03-15 | b6eb660 | Enforce FS rules: read-only root, tmpfs write_paths, ro bind-mounts |
 | 2026-03-15 | 4e49078 | PolicyEngine unit tests (18); fix r.research→r.search bug |
 | 2026-03-15 | 7393f1e | ToolRouter unit tests (20) |
+| 2026-03-15 | abab26d | DockerBackend integration tests (17); socket discovery for Rancher Desktop |
