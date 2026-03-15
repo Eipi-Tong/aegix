@@ -1,17 +1,16 @@
 # BOOTSTRAP FORM
-> Fill in this file before running `/project:bootstrap`.
-> The agent will read your answers and scaffold the project accordingly.
-> Leave any field as `~` if you want the agent to recommend a default.
+> Adopted from existing codebase on 2026-03-15.
+> Fields inferred from audit; mark `~` fields still need your input.
 
 ---
 
 ## 1. Project Identity
 
 ```
-Project name:       ~
-Short description:  ~
-Primary language:   ~        # e.g. TypeScript, Python, Go
-Target platform:    ~        # e.g. web, mobile-web, desktop, API-only
+Project name:       aegix
+Short description:  A secure, observable sandbox runtime for AI agent tool execution
+Primary language:   Python
+Target platform:    API-only / library + CLI
 ```
 
 ---
@@ -19,12 +18,9 @@ Target platform:    ~        # e.g. web, mobile-web, desktop, API-only
 ## 2. Repository Structure
 
 ```
-Structure:          ~        # monorepo | polyrepo | single-app
-# monorepo   → frontend/ backend/ packages/ all in one repo
-# polyrepo   → separate repos per service (agent will only scaffold one at a time)
-# single-app → no backend, frontend only (or backend only)
+Structure:          single-app   # Python monolith with 3 packages: aegix_core, aegix_cli, aegix_agent
 
-Top-level dirs:     ~        # only for monorepo — e.g. apps/web, apps/api, packages/ui
+Top-level dirs:     aegix_core/ aegix_cli/ aegix_agent/ examples/
 ```
 
 ---
@@ -32,13 +28,7 @@ Top-level dirs:     ~        # only for monorepo — e.g. apps/web, apps/api, pa
 ## 3. Frontend
 
 ```
-Include frontend:   ~        # yes | no
-
-Framework:          ~        # Next.js | Remix | SvelteKit | Nuxt | Vite+React | Vue | none
-Styling:            ~        # Tailwind | CSS Modules | styled-components | UnoCSS | none
-Component lib:      ~        # shadcn/ui | Radix | MUI | Chakra | none
-State management:   ~        # Zustand | Jotai | Redux Toolkit | React Query | none
-Auth (frontend):    ~        # NextAuth | Clerk | Supabase Auth | none
+Include frontend:   no
 ```
 
 ---
@@ -46,14 +36,14 @@ Auth (frontend):    ~        # NextAuth | Clerk | Supabase Auth | none
 ## 4. Backend
 
 ```
-Include backend:    ~        # yes | no
+Include backend:    yes
 
-Runtime:            ~        # Node.js | Python | Go | Rust | none
-Framework:          ~        # Express | Fastify | Hono | FastAPI | Django | Gin | none
-Database:           ~        # PostgreSQL | MySQL | SQLite | MongoDB | none
-ORM / query:        ~        # Prisma | Drizzle | SQLAlchemy | GORM | raw SQL | none
-Auth (backend):     ~        # JWT | session | Supabase | Auth.js | none
-API style:          ~        # REST | tRPC | GraphQL | none
+Runtime:            Python 3.11
+Framework:          none (library + Typer CLI)
+Database:           none
+ORM / query:        none
+Auth (backend):     none
+API style:          none (library / CLI; future: REST gateway planned)
 ```
 
 ---
@@ -61,10 +51,10 @@ API style:          ~        # REST | tRPC | GraphQL | none
 ## 5. Infrastructure & Deployment
 
 ```
-Containerize:       ~        # yes | no  (generates Dockerfile + docker-compose)
-Cloud target:       ~        # Vercel | Railway | Fly.io | AWS | GCP | self-hosted | none
-CI/CD:              ~        # GitHub Actions | GitLab CI | none
-Environment vars:   ~        # .env.local | Doppler | AWS Secrets | none
+Containerize:       yes   # uses Docker SDK to spin up ephemeral containers
+Cloud target:       ~     # not yet determined
+CI/CD:              none
+Environment vars:   .env  # aegix_agent/.env (OpenAI key)
 ```
 
 ---
@@ -72,12 +62,12 @@ Environment vars:   ~        # .env.local | Doppler | AWS Secrets | none
 ## 6. Tooling
 
 ```
-Package manager:    ~        # npm | pnpm | yarn | bun | pip | uv
-Linter:             ~        # ESLint | Biome | Ruff | none
-Formatter:          ~        # Prettier | Biome | Black | none
-Testing framework:  ~        # Vitest | Jest | Pytest | Playwright | none
-Git hooks:          ~        # Husky + lint-staged | lefthook | none
-Commit convention:  ~        # Conventional Commits | none
+Package manager:    pip   # pyproject.toml + hatchling build backend
+Linter:             ruff     # none configured yet
+Formatter:          ~     # none configured yet
+Testing framework:  pytest     # none configured yet (no tests exist)
+Git hooks:          none
+Commit convention:  Conventional Commits
 ```
 
 ---
@@ -85,10 +75,10 @@ Commit convention:  ~        # Conventional Commits | none
 ## 7. Agent Behaviour Preferences
 
 ```
-Auto-commit:        ~        # yes | no  (agent commits after every completed task)
-Doc sync:           ~        # yes | no  (agent updates SPEC.md when code changes)
-PR descriptions:    ~        # yes | no  (agent writes PR body on push)
-Notify on:          ~        # commit | pr | never  (when agent should pause for human review)
+Auto-commit:        yes
+Doc sync:           yes
+PR descriptions:    yes
+Notify on:          pr
 ```
 
 ---
@@ -96,10 +86,10 @@ Notify on:          ~        # commit | pr | never  (when agent should pause for
 ## 8. Team & Context
 
 ```
-Solo or team:       ~        # solo | team
-Main branch:        ~        # main | master
-Protected branches: ~        # e.g. main, staging
-Code review:        ~        # required | optional | none
+Solo or team:       solo
+Main branch:        main
+Protected branches: main
+Code review:        optional
 ```
 
 ---
@@ -107,7 +97,11 @@ Code review:        ~        # required | optional | none
 ## 9. Anything Else
 
 ```
-Notes for agent:    ~
-# Add anything that doesn't fit above — special constraints, existing services to integrate,
-# non-standard folder conventions, etc.
+Notes for agent:
+- aegix_core is the main library; aegix_cli is the Typer CLI entry point; aegix_agent contains example agent runners
+- Docker is used as the sandbox backend — docker daemon must be running
+- Resource limits (cpu, mem_mb, pids, timeout_s) are defined in models but NOT yet enforced in docker_backend.py
+- Network mode and FS rules are also not yet enforced in docker_backend.py
+- aegix_core/cli.py and aegix_core/router.py have import path inconsistencies (use `aegix.*` but package is `aegix_core`)
+- aegix_cli/main.py is currently empty (1 line)
 ```
