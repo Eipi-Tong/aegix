@@ -50,13 +50,18 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 
 ---
 
+### In Progress
+
+- [ ] **[P1]** Remove `aegix_cli/main.py` stub — `aegix_core/cli.py` is the canonical CLI entry point
+
+---
+
 ### Backlog
 
 #### Core Enforcement (P1)
 - [ ] **[P1]** Enforce resource limits in `DockerBackend` — apply `timeout_s`, `cpu`, `mem_mb`, `pids` from `AdjustedPolicy` when running containers
 - [ ] **[P1]** Enforce network mode in `DockerBackend` — pass `network_mode` / `network_allowlist` to container create
 - [ ] **[P1]** Enforce FS rules in `DockerBackend` — mount paths as read-only or writable per `FSRule`
-- [ ] **[P1]** Remove `aegix_cli/main.py` stub — `aegix_core/cli.py` is the canonical CLI entry point
 
 #### Testing (P1)
 - [ ] **[P1]** Unit tests for `PolicyEngine` — deny patterns, allow-list mode, per-tool limits
