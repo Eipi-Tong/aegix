@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 import typer
 
-from aegix.router import ToolRouter
+from aegix_core.router import ToolRouter
 
 app = typer.Typer(help="Aegix - Command Line Interface")
 

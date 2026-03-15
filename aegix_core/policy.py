@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 import json, re, yaml
 
-from aegix.models import (
+from aegix_core.models import (
     AdjustedPolicy, FSRule, Limits, NetworkMode, PolicyDecision, ToolCall, ToolContext
 )
 

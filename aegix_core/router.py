@@ -6,13 +6,13 @@ from typing import Optional
 import time
 import uuid
 
-from aegix.io.artifacts import ArtifactWriter
-from aegix.logging.audit import AuditLogger
-from aegix.runtime.docker_backend import DockerBackend, ExecResult
+from aegix_core.io.artifacts import ArtifactWriter
+from aegix_core.logging.audit import AuditLogger
+from aegix_core.runtime.docker_backend import DockerBackend, ExecResult
 
-# from aegix.models import ToolCall, ToolContext
-from aegix.policy import PolicyEngine
-from aegix.errors import AegixError
+# from aegix_core.models import ToolCall, ToolContext
+from aegix_core.policy import PolicyEngine
+from aegix_core.errors import AegixError
 
 
 @dataclass

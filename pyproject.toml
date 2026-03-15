@@ -23,5 +23,5 @@ license = "Apache-2.0"
 packages = ["aegix_agent", "aegix_core", "aegix_cli"]
 
 [project.scripts]
-aegix = "aegix_cli.main:app"
+aegix = "aegix_core.cli:app"
 
