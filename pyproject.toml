@@ -20,7 +20,7 @@ readme = "README.md"
 license = "Apache-2.0"
 
 [tool.hatch.build.targets.wheel]
-packages = ["aegix_agent", "aegix_core", "aegix_cli"]
+packages = ["aegix_agent", "aegix_core"]
 
 [project.scripts]
 aegix = "aegix_core.cli:app"
