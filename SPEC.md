@@ -30,6 +30,7 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 ### Done
 
 #### Core Runtime (`aegix_core`)
+- [x] Fix import paths — all `aegix_core` modules use correct `aegix_core.*` imports; CLI entry point wired to `aegix_core.cli:app`
 - [x] `ToolCall` / `ToolContext` data models (`aegix_core/models.py`)
 - [x] `AegixError` typed error model with error type literals (`aegix_core/errors.py`)
 - [x] `PolicyConfig` + `load_policy()` from YAML (`aegix_core/policy.py`)
@@ -46,12 +47,6 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 
 #### Example Agent (`aegix_agent`)
 - [x] OpenAI runner example — LLM tool call → Aegix exec loop (`aegix_agent/openai_runner.py`)
-
----
-
-### In Progress
-
-- [ ] **[P1]** Fix import path inconsistencies — `aegix_core/router.py` and `aegix_core/cli.py` import from `aegix.*` but the package is `aegix_core`
 
 ---
 
@@ -108,3 +103,4 @@ _All resolved._
 | Date | Commit | What changed |
 |---|---|---|
 | 2026-03-15 | — | Initial SPEC.md drafted during kit adoption |
+| 2026-03-15 | 9ca0c90 | Fix import paths: aegix.* → aegix_core.*, CLI entry point updated |
