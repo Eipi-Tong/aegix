@@ -34,6 +34,7 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 - [x] Remove `aegix_cli` stub package — `aegix_core/cli.py` is the sole CLI entry point
 - [x] Enforce resource limits — `nano_cpus`, `mem_limit`, `pids_limit` applied on container create; `timeout` command enforces wall-clock timeout on exec
 - [x] Enforce network mode — `none`/`bridge`/`host` mapped to Docker; `allowlist` uses bridge
+- [x] Enforce FS rules — container root is read-only; `write_paths` get tmpfs mounts; `read_only_paths` are bind-mounted `:ro` from host
 - [x] `ToolCall` / `ToolContext` data models (`aegix_core/models.py`)
 - [x] `AegixError` typed error model with error type literals (`aegix_core/errors.py`)
 - [x] `PolicyConfig` + `load_policy()` from YAML (`aegix_core/policy.py`)
@@ -50,12 +51,6 @@ Aegix is a secure, observable sandbox runtime designed to execute AI agent tool 
 
 #### Example Agent (`aegix_agent`)
 - [x] OpenAI runner example — LLM tool call → Aegix exec loop (`aegix_agent/openai_runner.py`)
-
----
-
-### In Progress
-
-- [ ] **[P1]** Enforce FS rules in `DockerBackend` — mount paths as read-only or writable per `FSRule`
 
 ---
 
@@ -110,3 +105,4 @@ _All resolved._
 | 2026-03-15 | e06fbef | Remove empty aegix_cli stub; aegix_core/cli.py is now canonical CLI |
 | 2026-03-15 | c8f8430 | Enforce resource limits (cpu, mem, pids, timeout) in DockerBackend |
 | 2026-03-15 | 2246ad7 | Enforce network mode (none/bridge/host/allowlist) in DockerBackend |
+| 2026-03-15 | b6eb660 | Enforce FS rules: read-only root, tmpfs write_paths, ro bind-mounts |
