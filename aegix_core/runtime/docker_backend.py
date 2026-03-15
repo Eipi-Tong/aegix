@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import docker
 
-from aegix_core.models import Limits, NetworkMode
+from aegix_core.models import FSRule, Limits, NetworkMode
 
 
 @dataclass(frozen=True)
@@ -27,9 +27,35 @@ class DockerBackend:
         "allowlist": "bridge",
     }
 
-    def create(self, image: str, limits: Limits, network_mode: NetworkMode) -> str:
-        """Create a detached container with resource limits and network mode applied."""
+    def create(
+        self,
+        image: str,
+        limits: Limits,
+        network_mode: NetworkMode,
+        fs_rules: FSRule,
+    ) -> str:
+        """Create a detached container with resource limits, network mode, and FS rules applied.
+
+        FS enforcement strategy:
+        - The container root filesystem is mounted read-only (read_only=True).
+        - write_paths are made writable via in-memory tmpfs mounts.
+        - /tmp is always added to tmpfs — it is required by many container
+          processes (e.g. Python, shells) even if not listed in write_paths.
+        - read_only_paths are bind-mounted from the host at the same path
+          with mode "ro", allowing the agent to read host data without modifying it.
+        """
         docker_network = self._NETWORK_MODE_MAP[network_mode]
+
+        # Always include /tmp so the container runtime itself doesn't break.
+        writable = set(fs_rules.write_paths) | {"/tmp"}
+        tmpfs: dict[str, str] = {path: "" for path in writable}
+
+        # Bind-mount host paths that should be readable inside the container.
+        volumes: dict[str, dict[str, str]] = {
+            path: {"bind": path, "mode": "ro"}
+            for path in fs_rules.read_only_paths
+        }
+
         container = self.client.containers.run(
             image=image,
             command=["sh", "-lc", "tail -f /dev/null"],
@@ -43,6 +69,11 @@ class DockerBackend:
             pids_limit=limits.pids,
             # Network isolation
             network_mode=docker_network,
+            # FS isolation: root is read-only; write_paths get tmpfs mounts
+            read_only=True,
+            tmpfs=tmpfs,
+            # read_only_paths are bind-mounted from host as :ro
+            volumes=volumes if volumes else None,
         )
         return container.id
 

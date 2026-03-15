@@ -77,6 +77,7 @@ class ToolRouter:
                 image=image,
                 limits=decision.adjusted.limits,
                 network_mode=decision.adjusted.network_mode,
+                fs_rules=decision.adjusted.fs_rules,
             )
             self.auditor.log("SANDBOX_CREATE_END", {"run_id": run_id, "container_id": container_id})
 
