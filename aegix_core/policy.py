@@ -127,7 +127,7 @@ class PolicyEngine:
                 )
         
         if self._allow_res:
-            ok = any(r.research(call.cmd or "") for r in self._allow_res)
+            ok = any(r.search(call.cmd or "") for r in self._allow_res)
             if not ok:
                 return PolicyDecision(
                     allow=False,
