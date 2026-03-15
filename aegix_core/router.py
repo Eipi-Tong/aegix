@@ -73,7 +73,11 @@ class ToolRouter:
             image = getattr(call, "image", None) or self.default_image
 
             self.auditor.log("SANDBOX_CREATE_START", {"run_id": run_id, "image": image})
-            container_id = self.backend.create(image=image, limits=decision.adjusted.limits)
+            container_id = self.backend.create(
+                image=image,
+                limits=decision.adjusted.limits,
+                network_mode=decision.adjusted.network_mode,
+            )
             self.auditor.log("SANDBOX_CREATE_END", {"run_id": run_id, "container_id": container_id})
 
             self.auditor.log("EXEC_START", {

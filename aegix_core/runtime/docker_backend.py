@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 import docker
 
-from aegix_core.models import Limits
+from aegix_core.models import Limits, NetworkMode
 
 
 @dataclass(frozen=True)
@@ -17,8 +17,19 @@ class DockerBackend:
     def __init__(self) -> None:
         self.client = docker.from_env()
 
-    def create(self, image: str, limits: Limits) -> str:
-        """Create a detached container with resource limits applied."""
+    # Maps our NetworkMode values to Docker's network_mode parameter.
+    # "allowlist" uses bridge networking — the policy engine has already
+    # validated the call; per-IP firewall rules are not applied at this layer.
+    _NETWORK_MODE_MAP: dict[NetworkMode, str] = {
+        "none": "none",
+        "bridge": "bridge",
+        "host": "host",
+        "allowlist": "bridge",
+    }
+
+    def create(self, image: str, limits: Limits, network_mode: NetworkMode) -> str:
+        """Create a detached container with resource limits and network mode applied."""
+        docker_network = self._NETWORK_MODE_MAP[network_mode]
         container = self.client.containers.run(
             image=image,
             command=["sh", "-lc", "tail -f /dev/null"],
@@ -30,6 +41,8 @@ class DockerBackend:
             mem_limit=f"{limits.mem_mb}m",
             # PID limit
             pids_limit=limits.pids,
+            # Network isolation
+            network_mode=docker_network,
         )
         return container.id
 
